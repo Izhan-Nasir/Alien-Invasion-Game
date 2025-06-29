@@ -6,6 +6,9 @@ from bullet import Bullet
 from alien import Alien
 from time import sleep
 from game_stats import GameStats
+from button import Button
+from scoreboard import Scoreboard
+
 class Game:
     """Manage the whole game."""
 
@@ -21,7 +24,9 @@ class Game:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self.stats = GameStats(self) # object for handling game stats
-        self.active = True # starting 
+        self.game_active = False # starting 
+        self.play_button = Button(self,"Play")
+        self.scoreboard = Scoreboard(self)
 
         self._create_fleet()
 
@@ -30,7 +35,7 @@ class Game:
 
         while True:
             self._check_events()
-            if (self.active):
+            if (self.game_active):
                 self.update_bullets()
                 self._update_aliens()
                 self.ship.update()
@@ -41,11 +46,15 @@ class Game:
         """Handles events."""
         for event in pygame.event.get():
             if (event.type == pygame.QUIT):
+                self.stats.save_highscore() # saving highscore before closing
                 sys.exit()
             elif (event.type == pygame.KEYDOWN):
                 self.check_keydown_events(event)
             elif (event.type == pygame.KEYUP):
                 self.check_keyup_events(event)
+            elif (event.type == pygame.MOUSEBUTTONDOWN):
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
 
     def check_keydown_events(self, event):
         if (event.key == pygame.K_RIGHT):
@@ -55,6 +64,7 @@ class Game:
         if (event.key == pygame.K_SPACE):
             self._fire_bullet()
         if (event.key == pygame.K_q):
+            self.stats.save_highscore() # saving highscore before closing
             sys.exit()
         
     def check_keyup_events(self, event):
@@ -70,6 +80,9 @@ class Game:
             bullet.draw_bullet()
         self.ship.blitme()
         self.aliens.draw(self.screen)
+        self.scoreboard.show_score()
+        if not (self.game_active):
+            self.play_button.draw_button()
         pygame.display.flip()
 
     def _fire_bullet(self):
@@ -86,14 +99,24 @@ class Game:
         self._check_bullet_collisions()
 
     def _check_bullet_collisions(self):
-        """Detect bullet and alien collision and delete both."""
+        """Detect bullet and alien collisions and delete both."""
 
         # collisions dictionary is used for storing scores
         collisions = pygame.sprite.groupcollide(self.aliens, self.bullets, True, True)
+
         if not (self.aliens):
-            # delete existing bullets and create a new fleet
+            # delete existing bullets and create a new fleet if all aliens 
+            # are dead
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed() # increase speed for new level
+            self.scoreboard.increase_level()
+
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+                self.scoreboard.prep_score() # recreate the score img 
+                self.scoreboard._check_highscore()
 
     def _create_fleet(self):
         """Draws a fleet of ships"""
@@ -104,7 +127,7 @@ class Game:
         # two alien rows is one alien-height
 
         alien_width , alien_height = alien.rect.size
-        current_x, current_y = alien_width, alien_height
+        current_x, current_y = alien_width, alien_height + 20
         current_x += 20
 
         while ((current_y < (self.settings.screen_height - 6 * alien_height))):
@@ -153,6 +176,7 @@ class Game:
         """Respond to the ship and alien collision."""
         if (self.stats.ships_left > 0):
             self.stats.ships_left -= 1 # decrement the ship lives
+            self.scoreboard.prep_ships()
 
             # delete the old stuff
             self.bullets.empty()
@@ -160,11 +184,12 @@ class Game:
 
             # Create new fleet and center the ship 
             self._create_fleet()
-            self.ship._center_ship()
+            self.ship.center_ship()
 
-            sleep(0.5) # pause for 1 second
+            sleep(0.5) # pause for 0.5 second
         else:
-            self.active = False
+            self.game_active = False
+            pygame.mouse.set_visible(True) # making the cursor visible
 
     def _check_aliens_bottom(self):
         """Respond appropriately if an alien has reached the bottom"""
@@ -173,6 +198,24 @@ class Game:
                 # same as collision between aliens and ship
                 self._ship_hit()
                 break
+
+    def _check_play_button(self, mos):
+        """Start a new game when player clicks on play button."""
+        
+        button_clicked = self.play_button.rect.collidepoint(mos)
+        if ((button_clicked) and (not self.game_active)):
+            self.stats.reset_stats()
+            self.scoreboard.prep_ships()
+            self.bullets.empty()
+            self.aliens.empty()
+            self.game_active = True 
+            self.ship.center_ship()
+            self._create_fleet()
+            self.settings.initialize_dynamic_settings()
+            self.scoreboard.prep_score() # score resets to zero to start fresh 
+            
+            # hiding the cursor
+            pygame.mouse.set_visible(False)
 
 if __name__ == '__main__':
     ai = Game()

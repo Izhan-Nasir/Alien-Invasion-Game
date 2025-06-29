@@ -1,10 +1,13 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship:
+class Ship(Sprite):
     """A class to handle the ship."""
 
     def __init__(self, game):
+        super().__init__() # running the Sprite class constructor
+
         self.screen = game.screen
         self.screen_rect = game.screen.get_rect()
 
@@ -15,6 +18,8 @@ class Ship:
         self.moving_left = False
         self.settings = game.settings
         self.x = float(self.rect.x)
+
+
         
     def blitme(self):
         """Draw the ship."""
@@ -29,7 +34,7 @@ class Ship:
 
         self.rect.x = self.x
 
-    def _center_ship(self):
+    def center_ship(self):
         """Center the ship."""
         self.rect.midbottom = self.screen_rect.midbottom
         self.x = float(self.rect.x)
