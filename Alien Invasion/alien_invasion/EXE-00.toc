@@ -1,0 +1,75 @@
+('/home/izhan-nasir/Python Learning/Python Projects/Alien '
+ 'Invasion/build/alien_invasion/alien_invasion',
+ False,
+ False,
+ True,
+ None,
+ None,
+ False,
+ False,
+ None,
+ True,
+ False,
+ None,
+ None,
+ None,
+ '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+ 'Invasion/build/alien_invasion/alien_invasion.pkg',
+ [('pyi-contents-directory _internal', '', 'OPTION'),
+  ('PYZ-00.pyz',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/build/alien_invasion/PYZ-00.pyz',
+   'PYZ'),
+  ('struct',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/build/alien_invasion/localpycs/struct.pyc',
+   'PYMODULE'),
+  ('pyimod01_archive',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/build/alien_invasion/localpycs/pyimod01_archive.pyc',
+   'PYMODULE'),
+  ('pyimod02_importers',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/build/alien_invasion/localpycs/pyimod02_importers.pyc',
+   'PYMODULE'),
+  ('pyimod03_ctypes',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/build/alien_invasion/localpycs/pyimod03_ctypes.pyc',
+   'PYMODULE'),
+  ('pyiboot01_bootstrap',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/.venv/lib/python3.12/site-packages/PyInstaller/loader/pyiboot01_bootstrap.py',
+   'PYSOURCE'),
+  ('pyi_rth_inspect',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/.venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks/pyi_rth_inspect.py',
+   'PYSOURCE'),
+  ('pyi_rth_pkgres',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/.venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks/pyi_rth_pkgres.py',
+   'PYSOURCE'),
+  ('pyi_rth_setuptools',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/.venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks/pyi_rth_setuptools.py',
+   'PYSOURCE'),
+  ('pyi_rth_multiprocessing',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/.venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py',
+   'PYSOURCE'),
+  ('pyi_rth_pkgutil',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/.venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks/pyi_rth_pkgutil.py',
+   'PYSOURCE'),
+  ('alien_invasion',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/alien_invasion.py',
+   'PYSOURCE')],
+ [],
+ False,
+ False,
+ 1751439794,
+ [('run',
+   '/home/izhan-nasir/Python Learning/Python Projects/Alien '
+   'Invasion/.venv/lib/python3.12/site-packages/PyInstaller/bootloader/Linux-64bit-intel/run',
+   'EXECUTABLE')],
+ '/lib/x86_64-linux-gnu/libpython3.12.so.1.0')
