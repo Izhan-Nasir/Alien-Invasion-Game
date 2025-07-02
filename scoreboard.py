@@ -14,6 +14,7 @@ class Scoreboard:
         self.screen_rect = self.screen.get_rect()
         self.settings = game.settings
         self.stats = game.stats
+        self.have_new_highscore = False
 
         # text settings
         self.text_font = pygame.font.SysFont(None, 28)
@@ -63,6 +64,10 @@ class Scoreboard:
         if (self.stats.score > self.stats.highscore):
             self.stats.highscore = self.stats.score
             self.prep_highscore()
+            return True
+        return False
+        
+
 
     def prep_level(self):
         """Render level as img on screen."""

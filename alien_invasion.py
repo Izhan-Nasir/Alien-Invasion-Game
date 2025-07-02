@@ -14,6 +14,7 @@ class Game:
 
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
         self.settings = Settings()  # objects for keeping track of game settings
         self.screen = pygame.display.set_mode((1200, 720))
         self.settings.screen_height = self.screen.get_rect().height
@@ -28,11 +29,38 @@ class Game:
         self.play_button = Button(self,"Play")
         self.scoreboard = Scoreboard(self)
 
+        self.high_score_music_triggered = False # <--- ADD THIS LINE
+
+
+        # helper method
         self._create_fleet()
+
+        # sounds effects
+        self.shoot_sound = pygame.mixer.Sound("Sound/Shoot.wav")
+        self.shoot_sound.set_volume(0.2)
+        self.alien_kill_sound = pygame.mixer.Sound("Sound/Alien_Destroy.wav")
+        self.alien_kill_sound.set_volume(0.4)
+        self.lose_sound = pygame.mixer.Sound("Sound/Lose.wav")
+        self.level_up_sound = pygame.mixer.Sound("Sound/Level_up.wav")
+
+        # Background music
+        self.music_playlist = [
+            "Sound/Background_1.mp3",
+            "Sound/Background_2.mp3",
+            "Sound/Oppenheimer.mp3",
+            "Sound/Trinity.mp3"
+        ]
+
+        self.music_index = -1
+
+        # defining a custom event for when music finishes
+        self.MUSIC_END_EVENT = pygame.USEREVENT + 1
 
     def run_game(self):
         """Main game loop"""
 
+        if (not self.game_active):
+            self.play_menu_music() # automatically turns off when play is pressed
         while True:
             self._check_events()
             if (self.game_active):
@@ -48,6 +76,8 @@ class Game:
             if (event.type == pygame.QUIT):
                 self.stats.save_highscore() # saving highscore before closing
                 sys.exit()
+            elif (event.type == self.MUSIC_END_EVENT):
+                self._play_next_song()
             elif (event.type == pygame.KEYDOWN):
                 self.check_keydown_events(event)
             elif (event.type == pygame.KEYUP):
@@ -89,6 +119,7 @@ class Game:
         """Create a new bullet and add it to the bullets group"""
         new_bullet = Bullet(self)
         self.bullets.add(new_bullet)
+        self.shoot_sound.play()
    
     def update_bullets(self):
         self.bullets.update()
@@ -111,12 +142,14 @@ class Game:
             self._create_fleet()
             self.settings.increase_speed() # increase speed for new level
             self.scoreboard.increase_level()
+            self.level_up_sound.play() 
 
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
-                self.scoreboard.prep_score() # recreate the score img 
                 self.scoreboard._check_highscore()
+                self.scoreboard.prep_score() # recreate the score img 
+                self.alien_kill_sound.play()
 
     def _create_fleet(self):
         """Draws a fleet of ships"""
@@ -174,6 +207,8 @@ class Game:
 
     def _ship_hit(self):
         """Respond to the ship and alien collision."""
+        
+        self.lose_sound.play()
         if (self.stats.ships_left > 0):
             self.stats.ships_left -= 1 # decrement the ship lives
             self.scoreboard.prep_ships()
@@ -186,7 +221,7 @@ class Game:
             self._create_fleet()
             self.ship.center_ship()
 
-            sleep(0.5) # pause for 0.5 second
+            sleep(2) # pause for 0.5 second
         else:
             self.game_active = False
             pygame.mouse.set_visible(True) # making the cursor visible
@@ -204,6 +239,7 @@ class Game:
         
         button_clicked = self.play_button.rect.collidepoint(mos)
         if ((button_clicked) and (not self.game_active)):
+            self._play_next_song()
             self.stats.reset_stats()
             self.scoreboard.prep_ships()
             self.bullets.empty()
@@ -216,6 +252,22 @@ class Game:
             
             # hiding the cursor
             pygame.mouse.set_visible(False)
+
+    def play_menu_music(self):
+        """Play menu background music."""
+            
+        pygame.mixer.music.load("Sound/Menu_Sound.mp3")
+        pygame.mixer.music.play(-1)
+
+    def _play_next_song(self):
+        """Play the next song in the playlist."""
+
+        self.music_index = (self.music_index + 1) % len(self.music_playlist)
+
+        pygame.mixer.music.load(self.music_playlist[self.music_index])
+        pygame.mixer.music.play()
+        pygame.mixer.music.set_endevent(self.MUSIC_END_EVENT)
+
 
 if __name__ == '__main__':
     ai = Game()
