@@ -22,37 +22,57 @@ A classic arcade-style space shooter built with Python and Pygame. Defend Earth 
 
 ## Controls
 
-| Key         | Action          |
-|-------------|-----------------|
-| `←` / `→`  | Move ship       |
-| `Space`     | Fire bullet     |
-| `Q`         | Quit game       |
+| Key        | Action      |
+|------------|-------------|
+| `←` / `→` | Move ship   |
+| `Space`    | Fire bullet |
+| `Q`        | Quit game   |
 
 ## Installation
 
 **Requirements:** Python 3.x
 
 1. Clone the repository:
-```bash
+   ```bash
    git clone https://github.com/your-username/Alien-Invasion-Game.git
    cd Alien-Invasion-Game
-```
+   ```
 
 2. Create and activate a virtual environment (VS Code recommended):
-```bash
+   ```bash
    python -m venv venv
    source venv/bin/activate      # macOS/Linux
    venv\Scripts\activate         # Windows
-```
+   ```
 
 3. Install dependencies:
-```bash
+   ```bash
    pip install -r Requirements.txt
-```
+   ```
 
 4. Run the game:
-```bash
+   ```bash
    python alien_invasion.py
-```
+   ```
 
 ## Project Structure
+
+```
+Alien-Invasion-Game/
+├── alien_invasion.py   # Main game loop and core logic
+├── settings.py         # All game configuration and scaling values
+├── ship.py             # Player ship class
+├── alien.py            # Alien class
+├── bullet.py           # Bullet class
+├── button.py           # UI button (Play)
+├── game_stats.py       # Score, lives, level tracking + highscore persistence
+├── scoreboard.py       # HUD rendering
+├── Images/             # Ship and alien sprites
+├── Sound/              # Background music and sound effects
+└── Highscore.json      # Auto-generated high score file
+```
+
+## Built With
+
+- [Python 3](https://www.python.org/)
+- [Pygame 2.6.1](https://www.pygame.org/)
